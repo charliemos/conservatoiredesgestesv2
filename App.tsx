@@ -229,7 +229,7 @@ useEffect(() => {
       </section>
 
 
-      <div className="flex-grow flex max-w-6xl w-full mx-auto p-4 md:p-8 gap-8">
+      <div className="grow flex max-w-6xl w-full mx-auto p-4 md:p-8 gap-8">
         {/* Sidebar Desktop */}
         <aside className="hidden md:flex flex-col w-64 shrink-0 space-y-10 sticky top-8 h-fit">
           <Link to="/">
@@ -256,7 +256,7 @@ useEffect(() => {
         </aside>
 
         {/* Main Area */}
-        <main className="flex-grow min-w-0">
+        <main className="grow min-w-0">
           <Routes>
             <Route path="/" element={<CataloguePage catalogue={catalogue} filters={filters} setFilters={setFilters} />} />
             <Route path="/about" element={<AboutPage catalogue={catalogue} onViewMemberData={handleMemberDataView} />} />

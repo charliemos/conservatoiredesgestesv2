@@ -55,9 +55,9 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ collection, searchText 
         {collection.data && collection.data.length > 0 ? (
           <div className="mt-6">
             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <span className="h-px bg-gray-200 flex-grow"></span>
+              <span className="h-px bg-gray-200 grow"></span>
               Ressources ({collection.data.length})
-              <span className="h-px bg-gray-200 flex-grow"></span>
+              <span className="h-px bg-gray-200 grow"></span>
             </h3>
             <div className="space-y-1">
               {collection.data.map((item, idx) => (
