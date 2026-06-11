@@ -1,0 +1,5 @@
+{
+  "name": "Conservatoire des Gestes et Savoir-faire",
+  "description": "Une application React moderne pour consulter et filtrer le catalogue des dépôts Nakala liés aux métiers d'art.", "version": "1.0.0", "author": "Charlie Mostajo", "license": "MIT", "rightsHolder" : "Re-Source, PIA FRANCE 2030",
+  "requestFramePermissions": []
+}

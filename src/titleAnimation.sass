@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css?family=Saira+Semi+Condensed')
+$font: 'Saira Semi Condensed', sans-serif
+$font-color: #8f6666
+$background: #2f2f30
+$transition: .01s
+$font-size: 2.5vw
+
+@mixin center
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+body
+  background: $background
+  font-family: $font
+  
+.title-container
+  +center
+  color: $font-color
+
+.first-container, .second-container
+  cursor: pointer
+  position: relative
+  
+  h1
+    position: relative
+    letter-spacing: 2px
+    font-size: $font-size
+    
+.first-container
+  margin-bottom: 0px
+  
+span
+  display: inline-block
+  position: relative
+  margin-right: 3px
+  &:after
+    content: ''
+    position: absolute
+    height: 100%
+    width: 0
+    top: 0
+    left: 0
+    transition: $transition
+    z-index: -5
+   
+@for $i from 1 through 50
+  .share:hover > h1 > span:nth-child(#{$i}):after
+    $delay: 20 * $i
+    $random: ($i * 5) - 30
+    background: #fde68a
+    width: 150%
+    transition: $transition
+    transition-delay: $delay + ms
+    transform: rotate($random + deg)
+  .share:hover > h1 > span:nth-child(#{$i})
+    $delayTwo: 20 * $i
+    color: $background
+    transition-delay: $delayTwo + ms
+
