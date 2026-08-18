@@ -20,9 +20,9 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ collection, searchText 
   };
 
   const formattedDate = collection.issued ? (() => {
-    const [d, m, y] = collection.issued.split('/');
-    const date = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
-    return date.toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+    const date = new Date(collection.issued);
+    if (isNaN(date.getTime())) return "n.c.";
+    return date.toLocaleDateString("fr-FR", { month: "long", year: "numeric", timeZone: "UTC" });
   })() : "n.c.";
 
   return (
