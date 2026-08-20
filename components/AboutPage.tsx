@@ -24,10 +24,9 @@ const AboutPage: React.FC<AboutPageProps> = ({ catalogue, onViewMemberData }) =>
   return (
     <div className="space-y-10 animate-fade-in">
       <section className="bg-amber-50/50 p-8 rounded-2xl border border-amber-100">
-        <h1 className="text-3xl font-extrabold text-amber-900 mb-6 tracking-tight">Bienvenue au conservatoire</h1>
-        <p className="text-lg text-amber-800/80 leading-relaxed mb-8 max-w-3xl">
-          Les métiers d'art, de la mode et du luxe occupent une place unique en France. Ils rassemblent des siècles d'histoire et une diversité unique de territoires et d'acteurs. 
-          Ce conservatoire vise à rassembler et valoriser les ressources documentaires et pédagogiques relatives à ces gestes et savoir-faire.
+        <h1 className="text-3xl font-extrabold text-black mb-6 tracking-tight">Le conservatoire en quelques mots</h1>
+        <p className="text-lg text-black/80 leading-relaxed mb-8 max-w-3xl">
+          Les métiers d'art, de la mode et du luxe occupent une place unique en France. Ils rassemblent des siècles d'histoire et une diversité unique de territoires et d'acteurs. Porté par le programme PIA France 2030, le Conservatoire des gestes et savoir-faire a pour ambition de réunir des acteurs interdisciplinaire afin de fournir des ressources humaines, techniques et pédagogiques pour la transmission des savoir-faire.
         </p>
         <button 
           onClick={() => window.location.hash = '#/'}
@@ -36,6 +35,14 @@ const AboutPage: React.FC<AboutPageProps> = ({ catalogue, onViewMemberData }) =>
           Rechercher des ressources
         </button>
       </section>
+
+      <section className="bg-gray-50 p-8 rounded-2xl border border-gray-100">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-6 tracking-tight">Métiers pilotes</h1>
+        <p className="text-lg text-gray-700/80 leading-relaxed mb-8 max-w-3xl">
+          Le conservatoire s'est constitué empiriquement à partir de métiers pilotes, choisis pour leur diversité et leur représentativité. Ces métiers sont représentés par des établissements partenaires, qui contribuent à la production de données de captation, la documentation et l'analyse des gestes.
+        </p>
+      </section> 
+      
 
       <section>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Les membres du Conservatoire</h2>

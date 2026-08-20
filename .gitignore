@@ -15,6 +15,11 @@ dist-ssr
 # Local tooling
 .claude/
 
+# Pre processing
+.pre_processing/csv_to_json.ipynb
+.pre_processing/registreDepot.csv
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
