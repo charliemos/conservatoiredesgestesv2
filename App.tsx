@@ -4,6 +4,7 @@ import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-ro
 import { CatalogueData, FilterState } from './types';
 import { normalizeRecord } from './services/dataService';
 import CataloguePage from './components/CataloguePage';
+import MetiersPage from './components/MetiersPage';
 import AboutPage from './components/AboutPage';
 import "./src/titleAnimation.sass";
 
@@ -54,6 +55,11 @@ useEffect(() => {
 
   const handleMemberDataView = (rightsHolder: string) => {
     setFilters(prev => ({ ...prev, rightsHolder }));
+    window.location.hash = '#/';
+  };
+
+  const handleDisciplineView = (discipline: string) => {
+    setFilters(prev => ({ ...prev, discipline }));
     window.location.hash = '#/';
   };
 
@@ -121,6 +127,20 @@ useEffect(() => {
           </Link>
 
           <Link
+            to="/metiers"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${
+              location.pathname === "/metiers"
+                ? "bg-amber-100 text-amber-900 shadow-sm shadow-amber-200"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            Métiers
+          </Link>
+
+          <Link
             to="/about"
             className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${
               location.pathname === "/about"
@@ -177,8 +197,15 @@ useEffect(() => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               Rechercher
             </Link>
-            <Link 
-              to="/about" 
+            <Link
+              to="/metiers"
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${location.pathname === '/metiers' ? 'bg-amber-100 text-amber-900 shadow-sm shadow-amber-200' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+              Métiers
+            </Link>
+            <Link
+              to="/about"
               className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${location.pathname === '/about' ? 'bg-amber-100 text-amber-900 shadow-sm shadow-amber-200' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -192,6 +219,7 @@ useEffect(() => {
         <main className="grow min-w-0">
           <Routes>
             <Route path="/" element={<CataloguePage catalogue={catalogue} filters={filters} setFilters={setFilters} />} />
+            <Route path="/metiers" element={<MetiersPage catalogue={catalogue} onViewDiscipline={handleDisciplineView} />} />
             <Route path="/about" element={<AboutPage catalogue={catalogue} onViewMemberData={handleMemberDataView} />} />
           </Routes>
         </main>
