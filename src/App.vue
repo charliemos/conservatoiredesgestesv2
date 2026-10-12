@@ -1,0 +1,147 @@
+<script setup>
+import { ref, watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { store, loadCatalogue } from '@/store';
+
+const NAV = [
+  { to: '/', label: 'Rechercher', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' },
+  { to: '/metiers', label: 'Métiers', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' },
+  { to: '/about', label: 'À propos', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+];
+
+const TITLE_LINES = ['Conservatoire des gestes', "et du savoir faire des métiers d'art"];
+
+const route = useRoute();
+const mobileMenuOpen = ref(false);
+
+onMounted(loadCatalogue);
+watch(() => route.path, () => { mobileMenuOpen.value = false; });
+
+const navClass = (to, inactive) => [
+  'flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all',
+  route.path === to ? 'bg-amber-100 text-amber-900 shadow-sm shadow-amber-200' : inactive,
+];
+</script>
+
+<template>
+  <div v-if="store.loading" class="min-h-screen flex items-center justify-center bg-[#fdfcf6]">
+    <div class="flex flex-col items-center gap-4">
+      <div class="w-12 h-12 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-amber-800 font-bold tracking-widest uppercase text-xs">Chargement du catalogue...</p>
+    </div>
+  </div>
+
+  <div v-else class="min-h-screen bg-[#fdfcf6] flex flex-col">
+    <!-- Mobile Navbar -->
+    <nav class="md:hidden bg-white border-b border-gray-100 px-4 py-6 sticky top-0 z-50">
+      <div class="flex justify-between items-center">
+        <RouterLink to="/" class="flex items-center gap-3">
+          <img src="/Logos/ReSource.png" alt="Logo" class="w-6 h-8" />
+          <span class="text-s font-black text-amber-900 leading-none">
+            Conservatoire des gestes<br />
+            et du savoir faire des métiers d'art
+          </span>
+        </RouterLink>
+
+        <button
+          type="button"
+          aria-label="Ouvrir le menu"
+          :aria-expanded="mobileMenuOpen"
+          class="text-gray-600 focus:outline-none"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              :d="mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16m-7 6h7'"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div v-if="mobileMenuOpen" class="mt-3 pb-2">
+        <div class="flex flex-col gap-2">
+          <RouterLink
+            v-for="item in NAV"
+            :key="item.to"
+            :to="item.to"
+            :class="navClass(item.to, 'text-gray-500 hover:bg-gray-100 hover:text-gray-700')"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon" />
+            </svg>
+            {{ item.label }}
+          </RouterLink>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Desktop -->
+    <section class="hidden md:block bg-amber-100 py-12 px-10 relative shadow-sm shadow-amber-200">
+      <div class="title-container">
+        <div
+          v-for="(line, l) in TITLE_LINES"
+          :key="l"
+          :class="[l === 0 ? 'first-container' : 'second-container', 'share']"
+        >
+          <h1 :aria-label="l === 0 ? TITLE_LINES.join(' ') : ''">
+            <span v-for="(ch, i) in line" :key="i">{{ ch === ' ' ? ' ' : ch }}</span>
+          </h1>
+        </div>
+      </div>
+    </section>
+
+    <div class="grow flex max-w-6xl w-full mx-auto p-4 md:p-8 gap-8">
+      <!-- Sidebar Desktop -->
+      <aside class="hidden md:flex flex-col w-64 shrink-0 space-y-10 sticky top-8 h-fit">
+        <RouterLink to="/">
+          <img src="/Logos/ReSource.png" alt="Conservatoire Logo" class="w-full rounded-2xl shadow-sm border border-gray-100" />
+        </RouterLink>
+
+        <nav class="space-y-2">
+          <RouterLink
+            v-for="item in NAV"
+            :key="item.to"
+            :to="item.to"
+            :class="navClass(item.to, 'text-gray-400 hover:bg-gray-100 hover:text-gray-600')"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon" />
+            </svg>
+            {{ item.label }}
+          </RouterLink>
+        </nav>
+      </aside>
+
+      <main class="grow min-w-0">
+        <RouterView />
+      </main>
+    </div>
+
+    <footer class="bg-gray-900 text-gray-500 py-12 px-8 mt-10">
+      <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex flex-col items-center md:items-start">
+          <span class="text-white font-black uppercase tracking-tighter text-lg italic">Re•Source</span>
+          <span class="text-xs">Projet France 2030</span>
+        </div>
+        <a
+          href="https://www.economie.gouv.fr/france-2030"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-auto inline-block"
+        >
+          <img
+            src="/Logos/France 2030.png"
+            alt="France 2030 Logo"
+            class="w-20 h-auto opacity-60 hover:opacity-100 transition-opacity"
+          />
+        </a>
+        <p class="text-xs text-center md:text-right max-w-sm">
+          Favoriser la transmission des compétences et la préservation du patrimoine immatériel des métiers d'art.
+        </p>
+      </div>
+    </footer>
+  </div>
+</template>

@@ -1,16 +1,13 @@
-
-import { Member } from './types';
-
-function slugifyInstitution(name) {
-  return name
+const slugifyInstitution = (name) =>
+  name
     .toString()
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
-}
-export const MEMBERS: Member[] = [
+
+export const MEMBERS = [
   {
     name : "Campus Mode, Métiers d'Art et Design",
     slug : slugifyInstitution("Campus Mode, Métiers d'Art et Design"),
@@ -91,7 +88,7 @@ export const MEMBERS: Member[] = [
   {
     name : "GIP FCIP PARIS",
     slug : slugifyInstitution("GIP PARIS"),
-    logo : "/Logos/GIP PARIS.png",
+    logo : "/Logos/GIP Paris.png",
     website : "https://www.gip-paris.fr/",
     description : "Groupement d’intérêt public oeuvrant comme support institutionnel aux GRETA et à la formation professionnelle continue, en coordonnant des initiatives de formation, d’ingénierie pédagogique et de reconversion professionnelle pour adultes.",
     address : "12 Boulevard d'Indochine, 75019 Paris, France",
