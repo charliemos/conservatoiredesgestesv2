@@ -10,6 +10,19 @@ const toArray = (value: any): string[] => {
   return String(value).split(';').map(v => v.trim()).filter(Boolean);
 };
 
+// Regroupe les catégories historiques du catalogue sous des libellés plus larges.
+const CATEGORY_MERGE_MAP: Record<string, string> = {
+  "Captation du geste": "Données instrumentales",
+  "Données de captation": "Données instrumentales",
+  "Artéfacts de médiation": "Ressources pédagogiques",
+  "Pédagogie": "Ressources pédagogiques",
+  "Recherche - Analyse narrative": "Recherche en SHS",
+  "Entretiens": "Recherche en SHS",
+  "Recherche - Attention / Eyetracking": "Recherche en SHS",
+};
+
+const mergeCategory = (category: string) => CATEGORY_MERGE_MAP[category] || category;
+
 export const normalizeRecord = (raw: any): NakalaResource => {
   const record: any = { ...raw };
 
@@ -55,6 +68,8 @@ export const normalizeRecord = (raw: any): NakalaResource => {
   record.audience = toArray(record.audience);
   record.subject = toArray(record.subject);
 
+  if (record.category) record.category = mergeCategory(record.category);
+
   return record;
 };
 
@@ -96,4 +111,73 @@ export const formatExtent = (extent: string) => {
   if (seconds) parts.push(`${seconds} s`);
 
   return parts.join(" ");
+};
+
+// --- Export CSV des métadonnées de gouvernance ---
+
+const GOVERNANCE_COLUMNS: { key: string; label: string }[] = [
+  { key: "kind", label: "Type" },
+  { key: "parentTitle", label: "Collection parente" },
+  { key: "title", label: "Titre" },
+  { key: "license", label: "Licence" },
+  { key: "rightsHolder", label: "Détenteur des droits" },
+  { key: "creator", label: "Producteur" },
+  { key: "publisher", label: "Éditeur" },
+  { key: "storage", label: "Dépôt" },
+  { key: "identifier", label: "Identifiant" },
+  { key: "doi", label: "DOI" },
+  { key: "created", label: "Date de production" },
+  { key: "issued", label: "Date de publication" },
+  { key: "language", label: "Langue" },
+];
+
+const governanceRow = (resource: NakalaResource, kind: "Collection" | "Ressource", parentTitle = "") => ({
+  kind,
+  parentTitle,
+  title: resource.title || "",
+  license: resource.license || "",
+  rightsHolder: Array.isArray(resource.rightsHolder) ? resource.rightsHolder.join("; ") : resource.rightsHolder || "",
+  creator: Array.isArray(resource.creator) ? resource.creator.join("; ") : resource.creator || "",
+  publisher: Array.isArray(resource.publisher) ? resource.publisher.join("; ") : resource.publisher || "",
+  storage: resource.storage || "",
+  identifier: resource.identifier || "",
+  doi: resource.doi || "",
+  created: resource.created || "",
+  issued: resource.issued || "",
+  language: resource.language || "",
+});
+
+export const collectionToGovernanceRows = (collection: NakalaResource) => [
+  governanceRow(collection, "Collection"),
+  ...(collection.data || []).map(d => governanceRow(d, "Ressource", collection.title || "")),
+];
+
+export const catalogueToGovernanceRows = (collections: NakalaResource[]) =>
+  collections.flatMap(collectionToGovernanceRows);
+
+const escapeCSVField = (value: string) => {
+  const str = String(value ?? "");
+  if (/[",\r\n]/.test(str)) return `"${str.replace(/"/g, '""')}"`;
+  return str;
+};
+
+const CSV_BOM = String.fromCharCode(0xFEFF);
+
+export const toCSV = (rows: Record<string, string>[]) => {
+  const header = GOVERNANCE_COLUMNS.map(c => c.label).join(",");
+  const lines = rows.map(row => GOVERNANCE_COLUMNS.map(c => escapeCSVField(row[c.key])).join(","));
+  return CSV_BOM + [header, ...lines].join("\r\n");
+};
+
+export const downloadCSV = (filename: string, rows: Record<string, string>[]) => {
+  const csv = toCSV(rows);
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 };

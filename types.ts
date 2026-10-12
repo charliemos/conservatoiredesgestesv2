@@ -33,7 +33,7 @@ export interface Member {
   website: string;
   description: string;
   address: string;
-  expertise: string | string[];
+  specialite: string | string[];
   rightsHolderKeys: string[];
 }
 

@@ -2,6 +2,10 @@
 import React, { useMemo } from 'react';
 import { CatalogueData, FilterState, NakalaResource } from '../types';
 import CollectionCard from './CollectionCard';
+import { catalogueToGovernanceRows, downloadCSV } from '../services/dataService';
+
+const NIVEAUX_MAITRISE = ["Apprenti", "Confirmé", "Maître d'art"];
+const PUBLICS = ["Professeur", "Professionnel", "Apprenant"];
 
 interface CataloguePageProps {
   catalogue: CatalogueData | null;
@@ -15,30 +19,22 @@ const CataloguePage: React.FC<CataloguePageProps> = ({ catalogue, filters, setFi
   const uniqueValues = useMemo(() => {
     const disciplines = new Set<string>();
     const categories = new Set<string>();
-    const expertise = new Set<string>();
-    const audiences = new Set<string>();
 
-    if (!catalogue) return { disciplines: [], categories: [], expertise: [], audiences: [] };
+    if (!catalogue) return { disciplines: [], categories: [] };
 
     catalogue.collections.forEach(col => {
       if (col.discipline) disciplines.add(col.discipline.trim());
       if (col.category) categories.add(col.category.trim());
-      (Array.isArray(col.expertise) ? col.expertise : []).forEach(e => expertise.add(e));
-      (Array.isArray(col.audience) ? col.audience : []).forEach(a => audiences.add(a));
-      
+
       (col.data || []).forEach(d => {
         if (d.discipline) disciplines.add(d.discipline.trim());
         if (d.category) categories.add(d.category.trim());
-        (Array.isArray(d.expertise) ? d.expertise : []).forEach(e => expertise.add(e));
-        (Array.isArray(d.audience) ? d.audience : []).forEach(a => audiences.add(a));
       });
     });
 
     return {
       disciplines: Array.from(disciplines).sort(),
       categories: Array.from(categories).sort(),
-      expertise: Array.from(expertise).sort(),
-      audiences: Array.from(audiences).sort(),
     };
   }, [catalogue]);
 
@@ -129,42 +125,52 @@ const CataloguePage: React.FC<CataloguePageProps> = ({ catalogue, filters, setFi
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Expertise</label>
-            <select 
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Niveau de maîtrise</label>
+            <select
               className="w-full bg-amber-50/50 border border-amber-100 rounded-xl py-2.5 px-3 text-sm text-amber-900 focus:outline-none transition-all appearance-none cursor-pointer"
               value={filters.expertise}
               onChange={(e) => handleFilterChange('expertise', e.target.value)}
             >
               <option value="">Tous les niveaux</option>
-              {uniqueValues.expertise.map(e => <option key={e} value={e}>{e}</option>)}
+              {NIVEAUX_MAITRISE.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Public</label>
-            <select 
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Public visé</label>
+            <select
               className="w-full bg-sky-50/50 border border-sky-100 rounded-xl py-2.5 px-3 text-sm text-sky-900 focus:outline-none transition-all appearance-none cursor-pointer"
               value={filters.audience}
               onChange={(e) => handleFilterChange('audience', e.target.value)}
             >
               <option value="">Tous les publics</option>
-              {uniqueValues.audiences.map(a => <option key={a} value={a}>{a}</option>)}
+              {PUBLICS.map(p => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
         </div>
 
-        {(filters.search || filters.category || filters.discipline || filters.expertise || filters.audience || filters.rightsHolder) && (
-          <div className="flex justify-between items-center pt-2">
-            <span className="text-xs text-gray-400 font-medium">{filteredCatalogue.length} collection(s) trouvée(s)</span>
-            <button 
-              onClick={() => setFilters({ search: '', category: '', discipline: '', expertise: '', audience: '', rightsHolder: '' })}
-              className="text-xs font-bold text-amber-700 hover:text-amber-900 flex items-center gap-1 transition-colors"
+        <div className="flex justify-between items-center pt-2">
+          <span className="text-xs text-gray-400 font-medium">{filteredCatalogue.length} collection(s) trouvée(s)</span>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => downloadCSV('gouvernance-catalogue.csv', catalogueToGovernanceRows(filteredCatalogue))}
+              disabled={filteredCatalogue.length === 0}
+              className="text-xs font-bold text-gray-500 hover:text-gray-800 flex items-center gap-1 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Effacer les filtres
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2-8H8a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"></path></svg>
+              Exporter la gouvernance (CSV)
             </button>
+            {(filters.search || filters.category || filters.discipline || filters.expertise || filters.audience || filters.rightsHolder) && (
+              <button
+                onClick={() => setFilters({ search: '', category: '', discipline: '', expertise: '', audience: '', rightsHolder: '' })}
+                className="text-xs font-bold text-amber-700 hover:text-amber-900 flex items-center gap-1 transition-colors"
+              >
+                Effacer les filtres
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            )}
           </div>
-        )}
+        </div>
       </section>
 
       {/* Catalogue List */}

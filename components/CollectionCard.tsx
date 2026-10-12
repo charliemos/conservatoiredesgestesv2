@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { NakalaResource } from '../types';
 import ResourceItem from './ResourceItem';
+import { collectionToGovernanceRows, downloadCSV } from '../services/dataService';
 
 interface CollectionCardProps {
   collection: NakalaResource;
@@ -9,6 +10,8 @@ interface CollectionCardProps {
 }
 
 const CollectionCard: React.FC<CollectionCardProps> = ({ collection, searchText }) => {
+  const [isGovOpen, setIsGovOpen] = useState(false);
+
   const highlight = (text: string) => {
     if (!searchText || !text) return text;
     const regex = new RegExp(`(${searchText})`, 'gi');
@@ -38,12 +41,40 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ collection, searchText 
       </header>
 
       <div className="p-6">
-        <div className="flex flex-wrap gap-x-4 gap-y-1 mb-4 text-xs text-gray-500 font-medium italic border-b border-gray-50 pb-4">
-          <span><strong>Producteur(s) :</strong> {highlight(Array.isArray(collection.creator) ? collection.creator.join('; ') : collection.creator || "n.c.")}</span>
-          <span><strong>Projet :</strong> {highlight(Array.isArray(collection.publisher) ? collection.publisher.join('; ') : collection.publisher || "n.c.")}</span>
-          <span><strong>Dépôt :</strong> {collection.storage || "Nakala"}</span>
-          <span><strong>Publiée :</strong> {formattedDate}</span>
-          <span><strong>Identifiant :</strong> {collection.identifier}</span>
+        <div className="mb-4 border-b border-gray-50 pb-4">
+          <button
+            onClick={() => setIsGovOpen(v => !v)}
+            className="w-full flex items-center justify-between text-xs font-bold text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-gray-400 font-bold w-3 text-center">{isGovOpen ? '−' : '+'}</span>
+              Informations de gouvernance
+            </span>
+            <span className="text-gray-400 font-medium italic normal-case">Publiée : {formattedDate}</span>
+          </button>
+
+          {isGovOpen && (
+            <div className="mt-3 pl-5 space-y-2">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 font-medium italic">
+                <span><strong>Producteur(s) :</strong> {highlight(Array.isArray(collection.creator) ? collection.creator.join('; ') : collection.creator || "n.c.")}</span>
+                <span><strong>Projet :</strong> {highlight(Array.isArray(collection.publisher) ? collection.publisher.join('; ') : collection.publisher || "n.c.")}</span>
+                <span><strong>Détenteur des droits :</strong> {Array.isArray(collection.rightsHolder) ? collection.rightsHolder.join('; ') || "n.c." : collection.rightsHolder || "n.c."}</span>
+                <span><strong>Licence :</strong> {collection.license || "n.c."}</span>
+                <span><strong>Dépôt :</strong> {collection.storage || "Nakala"}</span>
+                <span><strong>Identifiant :</strong> {collection.identifier || "n.c."}</span>
+                <span><strong>DOI :</strong> {collection.doi || "n.c."}</span>
+                <span><strong>Date de production :</strong> {collection.created || "n.c."}</span>
+                <span><strong>Langue :</strong> {collection.language || "n.c."}</span>
+              </div>
+              <button
+                onClick={() => downloadCSV(`gouvernance-${collection.identifier || collection.title || 'collection'}.csv`, collectionToGovernanceRows(collection))}
+                className="text-xs font-bold text-amber-700 hover:text-amber-900 flex items-center gap-1 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2-8H8a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"></path></svg>
+                Exporter en CSV
+              </button>
+            </div>
+          )}
         </div>
 
         {collection.description && (

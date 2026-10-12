@@ -163,7 +163,7 @@ useEffect(() => {
       <section className="hidden md:block bg-amber-100 py-12 px-10 relative shadow-sm shadow-amber-200">
         <div className="title-container">
           <div className="first-container share">
-            <h1 aria-label="Conservatoire des gestes">
+            <h1 aria-label="Conservatoire des gestes et du savoir faire des métiers d'art">
               {"Conservatoire des gestes".split("").map((ch, i) => (
                 <span key={i}>{ch === " " ? "\u00A0" : ch}</span>
               ))}
@@ -171,7 +171,7 @@ useEffect(() => {
           </div>
 
           <div className="second-container share">
-            <h1 aria-label="et du savoir faire des métiers d'art">
+            <h1 aria-label="">
               {"et du savoir faire des métiers d'art".split("").map((ch, i) => (
                 <span key={i}>{ch === " " ? "\u00A0" : ch}</span>
               ))}

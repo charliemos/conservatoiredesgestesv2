@@ -61,7 +61,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ catalogue, onViewMemberData }) =>
                     <h4 className="font-bold text-gray-900 group-hover:text-amber-800 transition-colors">{member.name}</h4>
                     <div className="flex gap-2 mt-2">
                       <a href={member.website} target="_blank" rel="noopener" className="text-[8px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded uppercase tracking-wider">Site Web</a>
-                      <span className="text-[8px] font-bold bg-amber-50 text-amber-600 px-2 py-0.5 rounded uppercase tracking-wider">{Array.isArray(member.expertise) ? member.expertise[0] : member.expertise}</span>
+                      <span className="text-[8px] font-bold bg-amber-50 text-amber-600 px-2 py-0.5 rounded uppercase tracking-wider">{Array.isArray(member.specialite) ? member.specialite[0] : member.specialite}</span>
                     </div>
                   </div>
                 </div>
