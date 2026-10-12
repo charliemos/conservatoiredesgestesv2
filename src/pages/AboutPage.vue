@@ -20,7 +20,7 @@ const firstSpecialite = (s) => (Array.isArray(s) ? s[0] : s);
     <section class="bg-amber-50/50 p-8 rounded-2xl border border-amber-100">
       <h1 class="text-3xl font-extrabold text-black mb-6 tracking-tight">Le conservatoire en quelques mots</h1>
       <p class="text-lg text-black/80 leading-relaxed mb-8 max-w-3xl">
-        Les métiers d'art, de la mode et du luxe occupent une place unique en France. Ils rassemblent des siècles d'histoire et une diversité unique de territoires et d'acteurs. Porté par le programme PIA France 2030, le Conservatoire des gestes et savoir-faire a pour ambition de réunir des acteurs interdisciplinaire afin de fournir des ressources humaines, techniques et pédagogiques pour la transmission des savoir-faire.
+        Les métiers d'art, de la mode et du luxe occupent une place unique en France. Ils rassemblent des siècles d'histoire et une diversité unique de territoires et d'acteurs. Porté par le programme PIA France 2030, le Conservatoire des gestes et du savoir-faire des métiers d'art a pour ambition de réunir des acteurs interdisciplinaire afin de fournir des ressources humaines, techniques et pédagogiques pour la transmission de ces savoir-faire d'exception.
       </p>
       <RouterLink
         to="/"
