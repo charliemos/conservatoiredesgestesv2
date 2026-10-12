@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { store, loadCatalogue } from '@/store';
 import HeroBanner from '@/components/HeroBanner.vue';
+import PhotoMosaic from '@/components/PhotoMosaic.vue';
 
 const NAV = [
   { to: '/', label: 'Rechercher', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' },
@@ -107,8 +108,13 @@ const navClass = (to, inactive) => [
       </main>
     </div>
 
-    <footer class="bg-gray-900 text-gray-500 py-12 px-8 mt-10">
-      <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <footer class="relative bg-gray-900 text-gray-500 md:text-gray-300 py-12 px-8 mt-10 overflow-hidden">
+      <!-- Sur ordinateur : même mosaïque animée que le bandeau, assombrie pour garder le texte lisible. -->
+      <div class="hidden md:block absolute inset-0" aria-hidden="true">
+        <PhotoMosaic :offset="4" />
+        <div class="absolute inset-0 bg-gray-900/75"></div>
+      </div>
+      <div class="relative max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="flex flex-col items-center md:items-start">
           <span class="text-white font-black uppercase tracking-tighter text-lg italic">Re•Source</span>
           <span class="text-xs">Projet France 2030</span>
@@ -117,12 +123,12 @@ const navClass = (to, inactive) => [
           href="https://www.economie.gouv.fr/france-2030"
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-auto inline-block"
+          class="mt-auto inline-block bg-white/90 hover:bg-white rounded-xl p-2 transition-colors"
         >
           <img
             src="/Logos/France 2030.png"
             alt="France 2030 Logo"
-            class="w-20 h-auto opacity-60 hover:opacity-100 transition-opacity"
+            class="w-16 h-auto"
           />
         </a>
         <p class="text-xs text-center md:text-right max-w-sm">

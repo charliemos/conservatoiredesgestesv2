@@ -1,9 +1,12 @@
-@import url('https://fonts.googleapis.com/css?family=Saira+Semi+Condensed')
+@import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;600;700&display=swap')
 $font: 'Saira Semi Condensed', sans-serif
 $background: #1e293b
 $font-color: #fde68a
 $transition: .01s
 $font-size: 2vw
+// Lisibilité du titre sur les photos du bandeau
+$font-weight: 600
+$text-shadow: 0 2px 3px rgba(0, 0, 0, .9), 0 0 16px rgba(0, 0, 0, .75)
 
 @mixin center
   position: absolute
@@ -25,6 +28,8 @@ body
     position: relative
     letter-spacing: 2px
     font-size: $font-size
+    font-weight: $font-weight
+    text-shadow: $text-shadow
     
 .first-container
   margin-bottom: 0px
@@ -55,5 +60,6 @@ span
   .share:hover > h1 > span:nth-child(#{$i})
     $delayTwo: 20 * $i
     color: $background
+    text-shadow: none
     transition-delay: $delayTwo + ms
 
