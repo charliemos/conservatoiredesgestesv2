@@ -17,7 +17,7 @@ const LAYOUT = [
   ['9 / 11', '1 / 2'], ['11 / 13', '1 / 2'], ['9 / 11', '2 / 3'], ['11 / 13', '2 / 3'],
 ];
 const INTERVAL = 3500;
-const TITLE_LINES = ['Conservatoire des gestes', "et du savoir faire des métiers d'art"];
+const TITLE_LINES = ["Conservatoire des gestes et du savoir faire des métiers d'art"];
 
 // Chaque case superpose deux images (a, b) ; `front` indique laquelle est visible.
 const tiles = ref(LAYOUT.map((_, i) => ({ a: i, b: i, front: 0 })));
@@ -65,7 +65,7 @@ const imgStyle = (visible) => ({
 
     <!-- Titre superposé ; `isolate` garde l'effet de survol des lettres au-dessus du fond du cartouche. -->
     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div class="pointer-events-auto isolate bg-amber-100/90 text-[#8f6666] px-10 py-5 rounded-2xl shadow-lg shadow-black/20">
+      <div class="pointer-events-auto isolate px-10 py-5 rounded-2xl">
         <div
           v-for="(line, l) in TITLE_LINES"
           :key="l"

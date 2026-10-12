@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Saira+Semi+Condensed')
 $font: 'Saira Semi Condensed', sans-serif
-$font-color: #8f6666
-$background: #2f2f30
+$background: #1e293b
+$font-color: #fde68a
 $transition: .01s
 $font-size: 2vw
 
@@ -16,12 +16,9 @@ body
   font-family: $font
 
   
-.title-container
-  +center
-  color: $font-color
-
 .first-container, .second-container
   cursor: pointer
+  color: $font-color
   position: relative
   
   h1
@@ -46,7 +43,7 @@ span
     transition: $transition
     z-index: -5
    
-@for $i from 1 through 50
+@for $i from 1 through 100
   .share:hover > h1 > span:nth-child(#{$i}):after
     $delay: 20 * $i
     $random: ($i * 5) - 30
