@@ -84,10 +84,6 @@ const navClass = (to, inactive) => [
     <div class="grow flex max-w-6xl w-full mx-auto p-4 md:p-8 gap-8">
       <!-- Sidebar Desktop -->
       <aside class="hidden md:flex flex-col w-64 shrink-0 space-y-10 sticky top-8 h-fit">
-        <RouterLink to="/">
-          <img src="/Logos/ReSource.png" alt="Conservatoire Logo" class="w-full rounded-2xl shadow-sm border border-gray-100" />
-        </RouterLink>
-
         <nav class="space-y-2">
           <RouterLink
             v-for="item in NAV"

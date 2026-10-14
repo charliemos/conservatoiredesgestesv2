@@ -7,7 +7,7 @@ const TITLE_LINES = ["Conservatoire des gestes et des savoir-faire des métiers 
 
 <template>
   <section class="hidden md:block relative h-[233px] pb-[3px] bg-[#fffcf3]">
-    <PhotoMosaic />
+    <PhotoMosaic :logos="['/Logos/ReSource.png']" />
 
     <!-- Voile sombre au centre, pour détacher le titre des photos. -->
     <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_55%_at_center,rgba(0,0,0,0.6),transparent)]"></div>

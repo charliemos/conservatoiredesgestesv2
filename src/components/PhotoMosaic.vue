@@ -20,28 +20,62 @@ const LAYOUT = [
 const INTERVAL = 3500;
 
 // `offset` décale les photos de départ, pour que deux mosaïques d'une même page ne soient pas identiques.
-const props = defineProps({ offset: { type: Number, default: 0 } });
+// `logos` : images toujours visibles (ex. logo), affichées en entier, en couleur, sur fond gris clair.
+// Chacune occupe en permanence une case et change de case tous les LOGO_MOVE_EVERY changements ;
+// au chargement, elles sont dans les premières cases (la première dans la grande case de gauche).
+const props = defineProps({
+  offset: { type: Number, default: 0 },
+  logos: { type: Array, default: () => [] },
+});
+const LOGO_MOVE_EVERY = 3;
+const nLogos = props.logos.length;
+const POOL = [
+  ...props.logos.map(src => ({ src, logo: true })),
+  ...PHOTOS.map(src => ({ src, logo: false })),
+];
 
-// Chaque case superpose deux images (a, b) ; `front` indique laquelle est visible.
-const start = (i) => (i + props.offset) % PHOTOS.length;
+// Chaque case superpose deux images (a, b), index dans POOL ; `front` indique laquelle est visible.
+const start = (i) => (i < nLogos ? i : nLogos + ((i - nLogos + props.offset) % PHOTOS.length));
 const tiles = ref(LAYOUT.map((_, i) => ({ a: start(i), b: start(i), front: 0 })));
 let last = -1;
+let swaps = 0;
 let timer = null;
 
-const swap = () => {
-  const shown = tiles.value.map(t => (t.front ? t.b : t.a));
-  const free = PHOTOS.map((_, i) => i).filter(i => !shown.includes(i));
-  let k;
-  do { k = Math.floor(Math.random() * tiles.value.length); } while (k === last);
-  last = k;
-  const img = free[Math.floor(Math.random() * free.length)];
-  const t = tiles.value[k];
+const shownIn = (t) => (t.front ? t.b : t.a);
+const randomOf = (list) => list[Math.floor(Math.random() * list.length)];
+
+// Fait apparaître en fondu l'image `img` dans la case `t`.
+const show = (t, img) => {
   if (t.front) Object.assign(t, { a: img, front: 0 });
   else Object.assign(t, { b: img, front: 1 });
 };
 
+const swap = () => {
+  const shown = tiles.value.map(shownIn);
+  const freePhotos = POOL.map((_, i) => i).filter(i => !POOL[i].logo && !shown.includes(i));
+  const photoTiles = tiles.value.map((_, i) => i).filter(i => !POOL[shown[i]].logo);
+  const logoTiles = tiles.value.map((_, i) => i).filter(i => POOL[shown[i]].logo);
+
+  swaps += 1;
+  if (logoTiles.length && swaps % LOGO_MOVE_EVERY === 0) {
+    // Déplacement d'un logo : il apparaît dans une case photo, une photo libre reprend sa place.
+    const from = randomOf(logoTiles);
+    const to = randomOf(photoTiles);
+    show(tiles.value[to], shown[from]);
+    show(tiles.value[from], randomOf(freePhotos));
+    last = to;
+    return;
+  }
+
+  // Changement ordinaire : une case photo (jamais celle d'un logo) passe sur une photo libre.
+  const candidates = photoTiles.filter(i => i !== last);
+  const k = randomOf(candidates.length ? candidates : photoTiles);
+  last = k;
+  show(tiles.value[k], randomOf(freePhotos));
+};
+
 onMounted(() => {
-  PHOTOS.forEach(src => { new Image().src = src; });
+  POOL.forEach(({ src }) => { new Image().src = src; });
   if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
   timer = setInterval(swap, INTERVAL);
 });
@@ -61,8 +95,14 @@ const imgStyle = (visible) => ({
       class="relative overflow-hidden bg-[#1c1c1c]"
       :style="{ gridColumn: LAYOUT[i][0], gridRow: LAYOUT[i][1] }"
     >
-      <img :src="PHOTOS[t.a]" alt="" class="mosaic-img" :style="imgStyle(!t.front)" />
-      <img :src="PHOTOS[t.b]" alt="" class="mosaic-img" :style="imgStyle(!!t.front)" />
+      <img
+        v-for="(slot, s) in [t.a, t.b]"
+        :key="s"
+        :src="POOL[slot].src"
+        alt=""
+        :class="['mosaic-img', { 'mosaic-logo': POOL[slot].logo }]"
+        :style="imgStyle(s === 0 ? !t.front : !!t.front)"
+      />
     </div>
   </div>
 </template>
@@ -76,5 +116,12 @@ const imgStyle = (visible) => ({
   object-fit: cover;
   filter: grayscale(1) contrast(1.1);
   transition: opacity 2s ease, transform 10s ease-out;
+}
+/* Logo : affiché en entier, sans filtre, sur un gris clair qui s'accorde aux photos en noir et blanc. */
+.mosaic-logo {
+  object-fit: contain;
+  padding: 8% 10%;
+  background: #e6e6e6;
+  filter: none;
 }
 </style>

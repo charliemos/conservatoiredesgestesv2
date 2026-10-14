@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;600;700&display=swap')
-$font: 'Saira Semi Condensed', sans-serif
+// Police du titre : réglée par --font-title en haut de src/index.css.
 $background: #1e293b
 $font-color: #fde68a
 $transition: .01s
 $font-size: 2vw
 // Lisibilité du titre sur les photos du bandeau
-$font-weight: 600
+$font-weight: 500
 $text-shadow: 0 2px 3px rgba(0, 0, 0, .9), 0 0 16px rgba(0, 0, 0, .75)
 
 @mixin center
@@ -16,7 +15,6 @@ $text-shadow: 0 2px 3px rgba(0, 0, 0, .9), 0 0 16px rgba(0, 0, 0, .75)
 
 body
   background: $background
-  font-family: $font 
 
   
 .first-container, .second-container
@@ -27,6 +25,7 @@ body
   h1
     position: relative
     letter-spacing: 2px
+    font-family: var(--font-title)
     font-size: $font-size
     font-weight: $font-weight
     text-shadow: $text-shadow

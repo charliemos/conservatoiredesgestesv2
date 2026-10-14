@@ -1,7 +1,19 @@
+/* ==========================================================================
+   POLICES : les deux seuls réglages à modifier pour changer de police
+   1. Charger la ou les polices (une ligne @import par police, depuis fonts.google.com).
+   2. Choisir la police du site (--font-site) et celle du titre du bandeau (--font-title).
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Clarity+City:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --font-site: 'Clarity City', sans-serif;   /* tout le site : menus, textes, formulaires */
+  --font-title: 'Clarity City', sans-serif;  /* titre animé du bandeau */
+}
+
 @import "tailwindcss";
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-site);
   background-color: #f8f9fa;
 }
 
