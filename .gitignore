@@ -16,6 +16,13 @@ dist-ssr
 # Local tooling
 .claude/
 
+# API de suivi : fichier Excel (données internes) et configuration locale, jamais versionnés
+*.xlsx
+~$*
+server/config.local.json
+__pycache__/
+.venv/
+
 # Pre processing
 .pre_processing/csv_to_json.ipynb
 .pre_processing/registreDepot.csv

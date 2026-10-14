@@ -6,11 +6,13 @@ Site statique (SPA Vue) : les données sont lues depuis `public/data/catalogue.j
 
 ## Développement
 
-**Prérequis :** Node.js
+**Prérequis :** Node.js, et Python 3 pour l'onglet Suivi
 
 ```bash
-npm install      # installer les dépendances
-npm run dev      # serveur de développement (http://localhost:3000)
+npm install                                # installer les dépendances
+pip install -r server/requirements.txt     # dépendances de l'API de suivi (une fois)
+npm run dev      # site (http://localhost:3000) + API de suivi (http://localhost:8000)
+npm run dev:site # site seul, sans l'API
 npm run build    # build de production dans dist/
 npm run preview  # prévisualiser le build de production
 ```
@@ -24,15 +26,18 @@ npm run preview  # prévisualiser le build de production
 ## Onglet Suivi (interne)
 
 L'onglet **Suivi** (`#/suivi`) affiche le rapport Power BI du projet et permet de créer, modifier et supprimer
-les opérations et productions du fichier Excel de suivi. Il s'appuie sur l'API FastAPI du projet voisin
-`api-suivi`, qui doit tourner en parallèle :
+les opérations et productions du fichier Excel de suivi. Il s'appuie sur l'API FastAPI de `server/main.py`,
+lancée automatiquement avec le site par `npm run dev` (ou seule avec `npm run api`). Swagger :
+http://localhost:8000/docs.
 
-```bash
-cd ../api-suivi
-python main_local.py   # API sur http://localhost:8000, routes sous /api
-```
+**Fichier Excel.** Il n'est jamais versionné (`*.xlsx` dans `.gitignore`). Son chemin est lu, dans l'ordre :
+1. dans la variable d'environnement `EXCEL_FILE_PATH` ;
+2. dans `server/config.local.json` (non versionné ; copier `server/config.example.json` et y mettre le chemin) ;
+3. à défaut, `server/suivi_projet.xlsx`.
 
-En dev, `vite.config.js` redirige `/api` vers ce port. Pour un autre hébergement de l'API, définir
+Le fichier ne doit pas être ouvert dans Excel pendant les modifications (Excel le verrouille).
+
+En dev, `vite.config.js` redirige `/api` vers le port 8000. Pour un autre hébergement de l'API, définir
 `VITE_SUIVI_API_URL` (et `VITE_SUIVI_DOCS_URL` pour le lien Swagger) au moment du build.
 
 ⚠️ L'API n'a **aucune authentification** : ne pas exposer l'onglet Suivi sur le site public tant
@@ -50,3 +55,4 @@ Remplacer `public/data/catalogue.json` puis republier le site (`npm run build`).
 - `data/` : membres du conservatoire et métiers étudiés
 - `pages/` et `components/` : pages Recherche / Métiers / À propos / Suivi et cartes collection / ressource
 - `suivi/` : onglet Suivi (accès à l'API, état, formulaires opérations / productions)
+- `../server/` : API de suivi en Python (FastAPI + openpyxl) qui lit et écrit le fichier Excel

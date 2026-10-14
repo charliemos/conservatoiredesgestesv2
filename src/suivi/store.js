@@ -26,7 +26,7 @@ export const loadSuivi = async () => {
   } catch {
     Object.assign(suivi, {
       connected: false,
-      statusText: 'API de suivi inaccessible — lancez `python main_local.py` dans le dossier api-suivi.',
+      statusText: 'API de suivi inaccessible — lancez le site avec `npm run dev` (qui démarre aussi l’API) et vérifiez le terminal « api ».',
     });
   } finally {
     suivi.loaded = true;

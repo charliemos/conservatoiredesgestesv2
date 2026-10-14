@@ -1,4 +1,4 @@
-// Accès à l'API de suivi (FastAPI, projet api-suivi / main_local.py).
+// Accès à l'API de suivi (FastAPI, server/main.py).
 // En dev, `/api` est redirigé vers http://localhost:8000 par le proxy de vite.config.js.
 // Pour un autre hébergement, définir VITE_SUIVI_API_URL (ex. https://suivi.exemple.fr/api).
 const BASE = import.meta.env.VITE_SUIVI_API_URL || '/api';
