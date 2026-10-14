@@ -10,7 +10,7 @@ const POWERBI_URL =
   'https://app.powerbi.com/view?r=eyJrIjoiNThjNTc1NjgtNmIwZC00YzFiLWE5YWUtN2NlM2YwNmIwZWJjIiwidCI6IjRmOGZkNjk1LWIzYjUtNDA4Mi04MDA1LTYxMGU5NDUzZTZkMCIsImMiOjh9';
 
 const route = useRoute();
-onMounted(() => { if (!suivi.loaded) loadSuivi(); });
+onMounted(() => { if (!suivi.connected) loadSuivi(); });
 </script>
 
 <template>
@@ -25,7 +25,7 @@ onMounted(() => { if (!suivi.loaded) loadSuivi(); });
     <section :class="[ui.card, 'flex flex-wrap items-center gap-3 !py-4']">
       <span :class="['w-2.5 h-2.5 rounded-full shrink-0', suivi.connected ? 'bg-green-500' : suivi.loaded ? 'bg-red-500' : 'bg-gray-300']"></span>
       <span class="text-xs text-gray-500 flex-1 min-w-0 break-all">{{ suivi.statusText }}</span>
-      <button class="text-xs font-bold text-amber-700 hover:text-amber-900" @click="loadSuivi">Recharger</button>
+      <button class="text-xs font-bold text-amber-700 hover:text-amber-900" @click="loadSuivi()">Recharger</button>
       <a :href="DOCS_URL" target="_blank" rel="noopener" class="text-xs font-bold text-gray-500 hover:text-gray-800">Swagger ↗</a>
     </section>
 

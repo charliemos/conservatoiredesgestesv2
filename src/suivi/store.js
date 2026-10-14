@@ -12,24 +12,35 @@ export const suivi = reactive({
   membres: [],
 });
 
-export const loadSuivi = async () => {
+// L'API Python met quelques secondes à démarrer après le site (`npm run dev`) :
+// en cas d'échec, on réessaie automatiquement avant d'afficher l'erreur.
+const RETRIES = 6;
+const RETRY_DELAY = 2000;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+export const loadSuivi = async (retries = RETRIES) => {
   try {
     const info = await api.info();
     const [actions, operations, productions, membres] = await Promise.all([
       api.actions(), api.operations(), api.productions(), api.membres(),
     ]);
     Object.assign(suivi, {
+      loaded: true,
       connected: true,
       statusText: `Connecté · ${info.fichier} (${info.taille_ko} ko)`,
       actions, operations, productions, membres,
     });
   } catch {
+    if (retries > 0) {
+      suivi.statusText = 'Connexion à l’API de suivi… (démarrage en cours)';
+      await wait(RETRY_DELAY);
+      return loadSuivi(retries - 1);
+    }
     Object.assign(suivi, {
+      loaded: true,
       connected: false,
       statusText: 'API de suivi inaccessible — lancez le site avec `npm run dev` (qui démarre aussi l’API) et vérifiez le terminal « api ».',
     });
-  } finally {
-    suivi.loaded = true;
   }
 };
 
