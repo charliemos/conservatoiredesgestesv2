@@ -2,7 +2,7 @@
 import PhotoMosaic from './PhotoMosaic.vue';
 
 // Bandeau du haut : mosaïque de photos animée avec le titre superposé.
-const TITLE_LINES = ["Conservatoire des gestes et du savoir faire des métiers d'art"];
+const TITLE_LINES = ["Conservatoire des gestes et des savoir-faire des métiers d'art"];
 </script>
 
 <template>
