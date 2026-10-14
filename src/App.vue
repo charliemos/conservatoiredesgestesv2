@@ -108,12 +108,15 @@ const navClass = (to, inactive) => [
       <!-- Sur ordinateur : même mosaïque animée que le bandeau, assombrie pour garder le texte lisible. -->
       <div class="hidden md:block absolute inset-0" aria-hidden="true">
         <PhotoMosaic :offset="4" />
-        <div class="absolute inset-0 bg-gray-900/75"></div>
+        <div class="absolute inset-0 bg-black/75"></div>
       </div>
       <div class="relative max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="flex flex-col items-center md:items-start">
-          <span class="text-white font-black uppercase tracking-tighter text-lg italic">Re•Source</span>
+          <span class="text-white font-black uppercase tracking-tight text-lg">Re•Source</span>
           <span class="text-xs">Projet France 2030</span>
+        </div>
+        <div class="flex flex-col items-center md:items-end gap-2">
+          <span class="text-md">Soutenu par</span>
         </div>
         <a
           href="https://www.economie.gouv.fr/france-2030"
@@ -126,6 +129,32 @@ const navClass = (to, inactive) => [
             alt="France 2030 Logo"
             class="w-16 h-auto"
           />
+        </a>
+        <a 
+          href = "https://consignations.caissedesdepots.fr/"
+          alt="Caisse des Dépôts et Consignations Logo"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/Logos/CDC.png"
+            alt="Caisse des Dépôts et Consignations Logo"
+            class="w-16 h-auto"
+          />
+          <a
+            href = "https://fondation.michelin.com/"
+            alt="Fondation Michelin Logo"
+            target="_blank"
+            rel="noopener noreferrer"
+            class = "mt-2 inline-block p-0"
+           
+          >
+            <img
+              src="/Logos/FondationMichelin.png"
+              alt="Fondation Michelin Logo"
+              class="w-30 h-auto"
+            />
+          </a>
         </a>
         <p class="text-xs text-center md:text-right max-w-sm">
           Favoriser la transmission des compétences et la préservation du patrimoine immatériel des métiers d'art.
