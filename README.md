@@ -40,8 +40,6 @@ Le fichier ne doit pas être ouvert dans Excel pendant les modifications (Excel 
 En dev, `vite.config.js` redirige `/api` vers le port 8000. Pour un autre hébergement de l'API, définir
 `VITE_SUIVI_API_URL` (et `VITE_SUIVI_DOCS_URL` pour le lien Swagger) au moment du build.
 
-⚠️ L'API n'a **aucune authentification** : ne pas exposer l'onglet Suivi sur le site public tant
-qu'une authentification n'est pas en place.
 
 ## Mettre à jour le catalogue
 
